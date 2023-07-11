@@ -10,7 +10,7 @@ class ApiConnector{
     protected string $method ; //
     protected array $headers ; //
     protected bool $redirect = false; //
-    protected string $auth ; // 
+    protected $auth ; // 
     protected $body ; // 
     protected array $cert ; // 
     protected $cookies ; //
@@ -40,13 +40,22 @@ class ApiConnector{
     protected string $referer ; //
 
     public function __construct(string $url,string $method){
-        if(!in_array(strtoupper($method),$this->methods)) throw new Exception('Invalid method',404);
+        // if(!in_array(strtoupper($method),$this->methods)) throw new Exception('Invalid method',404);
         $this->url = $url;
         $this->method = strtoupper($method);
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
     }
     public function setHeaders(array $headers){
-        $this->headers['headers'] = $headers;
+        $hdrs = [];
+        if(is_array($headers) and count($headers)>0){
+            foreach ($headers as $key => $value) {
+                $parse = explode(':',$value);
+                if(count($parse)==2){
+                    $hdrs[$parse[0]] =$parse[1]; 
+                }
+            }
+        }
+        $this->headers = $hdrs;
         return $this;
     }
     public function setRedirect(bool $redirect){
@@ -109,7 +118,9 @@ class ApiConnector{
         $this->idnConversion = $idnConversion;
         return $this;
     }
-    public function setJson(array $json){
+    public function setJson( $json){
+        $json = json_decode($json,true);
+        if(is_null($json)) throw new Exception('Invalid Json');
         $this->json = json_encode($json);
         return $this;
     }
