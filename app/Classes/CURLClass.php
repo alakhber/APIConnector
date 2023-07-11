@@ -144,7 +144,7 @@ class CURLClass extends ApiConnector
         if (!is_null($postFields)) {
             $this->curlOptions[CURLOPT_POSTFIELDS] = $postFields;
         }
-        dd( $this->curlOptions);
+       
         curl_setopt_array($this->curl, $this->curlOptions);
        
         $curlInfo = curl_getinfo($this->curl);
