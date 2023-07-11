@@ -3,32 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Classes\CURLClass;
-use App\Services\ApiConnector;
+use App\Classes\GzzClass;
 use Illuminate\Http\Request;
 
 class ApiConnectorController extends Controller
 {
     public function connector(Request $request){
-        
+       
         $headers = [
-                'Accept'=>'a',
-                'Accept-Charset'=>'application/json',
-                'Accept-Encoding'=>'application/ecmascript',
-                'Accept-Language'=>'az',
-             ];
-             
+             'Content-Type: application/json',
+        ];
+
         $a = 
-         (new CURLClass($request->url,'post'))
+         (new GzzClass($request->url,$request->method))
          ->setHeaders($headers)
-         ->setFormParams(['fin'=>1112])
-         ->setConnectTimeout(2)
-         ->setReferer($request->url)
-         ->setAuth('username:password')
-         ->setVersion(2)
-         ->setBody('test')
          ->build()
          ->run();
-        dd($a);
+        return $a;
     }
 }
 
