@@ -2,24 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\CURLClass;
-use App\Classes\GzzClass;
+use App\Services\ApiRequest;
 use Illuminate\Http\Request;
 
 class ApiConnectorController extends Controller
 {
     public function connector(Request $request){
        
-        $headers = [
-             'Content-Type: application/json',
-        ];
+        $new = (new ApiRequest('https://countriesnow.space/api/v0.1/countries/population/cities','get'))
+            ->send();
 
-        $a = 
-         (new GzzClass($request->url,$request->method))
-         ->setHeaders($headers)
-         ->build()
-         ->run();
-        return $a;
+        return $new;
     }
 }
 
